@@ -1,14 +1,14 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+// eslint.config.mjs
+// @ts-ignore
+import js from '@eslint/js';
+import next from'C:\Users\punee\Desktop\task-manager\node_modules\@next\eslint-plugin-next\dist\index.js'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [...compat.extends("next/core-web-vitals")];
-
-export default eslintConfig;
+export default [
+  js.configs.recommended, // Use ESLint's recommended rules
+  next.configs.recommended, // Use Next.js's recommended rules
+  {
+    rules: {
+      // Add any custom rules here
+    },
+  },
+];
