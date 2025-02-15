@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <Header />
-      <Suspense fallback={<div>Loading tasks...</div>}>
+      <Suspense fallback={<p></p>}>
         <TaskList />
       </Suspense>
     </div>
