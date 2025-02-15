@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { toggleTaskStatus, deleteTask } from '@/app/actions/taskActions';
 import { useSearchParams, useRouter } from 'next/navigation';
 
@@ -84,21 +84,37 @@ function TaskList() {
         tasks.map((task) => (
           <div
             key={task._id}
-            className={`mb-4 mx-8 rounded-lg shadow-md cursor-pointer transition-all duration-200 scale-102 ${
+            className={`mb-4 mx-8 rounded-lg shadow-md transition-all duration-200 scale-102 ${
               task.status === 'completed'
                 ? 'bg-gradient-to-br from-green-200 to-emerald-300 hover:from-green-400 hover:to-green-300'
                 : 'bg-gradient-to-br from-yellow-200 to-amber-300 hover:from-yellow-400 hover:to-yellow-200'
             }`}
           >
             {/* Task Header */}
-            <div
-              className="pr-0 flex flex-row items-stretch gap-4"
-              onClick={() => setExpandedTask(expandedTask === task._id ? null : task._id)}
-            >
+            <div className="pr-0 flex flex-row items-stretch gap-4">
               <div className="flex-1 py-4 pl-4">
-                <h3 className="text-xl font-semibold truncate overflow-hidden sm:max-w-[350px] md:max-w-[450px]">
-                  {task.title}
-                </h3>
+                {/* Title and Arrow Container */}
+                <div className="flex items-center gap-2">
+                  <h3 className="text-xl font-semibold truncate overflow-hidden sm:max-w-[350px] md:max-w-[450px]">
+                    {task.title}
+                  </h3>
+                  {/* Arrow Button with Tooltip */}
+                  <div
+                    className="cursor-pointer relative group"
+                    onClick={() => setExpandedTask(expandedTask === task._id ? null : task._id)}
+                  >
+                    {/* Tooltip */}
+                    <div className="absolute -top-2 left-8 w-max bg-white  text-black text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                      {expandedTask === task._id ? 'Hide description' : 'See description'}
+                    </div>
+                    {/* Arrow Icon */}
+                    {expandedTask === task._id ? (
+                      <FaChevronUp className="text-gray-600" />
+                    ) : (
+                      <FaChevronDown className="text-gray-600" />
+                    )}
+                  </div>
+                </div>
                 <p className="text-sm text-blue-700 pt-2">Due: {new Date(task.dueDate).toLocaleDateString('en-GB')}</p>
               </div>
 
