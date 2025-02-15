@@ -105,7 +105,7 @@ function TaskList() {
                   >
                     {/* Tooltip */}
                     <div className="absolute -top-2 left-8 w-max bg-white  text-black text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      {expandedTask === task._id ? 'Hide description' : 'See description'}
+                      {expandedTask === task._id ? 'Hide Description' : 'See Description'}
                     </div>
                     {/* Arrow Icon */}
                     {expandedTask === task._id ? (
