@@ -5,15 +5,7 @@ import { FaEdit, FaTrash, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { toggleTaskStatus, deleteTask } from '@/app/actions/taskActions';
 import { useSearchParams, useRouter } from 'next/navigation';
 
-/**
- * TaskList Component
- * - Fetches and displays tasks
- * - Allows toggling task status
- * - Supports deleting tasks with confirmation
- * - Enables expanding task details
- */
 function TaskList() {
-  // State management
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedTask, setExpandedTask] = useState(null);
@@ -22,21 +14,16 @@ function TaskList() {
   const searchQuery = searchParams.get('search') || '';
   const router = useRouter();
 
-  // Fetch tasks whenever the search query changes
   useEffect(() => {
     fetchTasks();
   }, [searchQuery]);
 
-  /**
-   * Fetches tasks from the API and sorts them by status and due date
-   */
   const fetchTasks = async () => {
     setLoading(true);
     try {
       const res = await fetch(`/api/tasks?search=${searchQuery}`);
       const data = await res.json();
 
-      // Sort tasks: Pending first, then by due date
       data.sort((a, b) => {
         if (a.status === 'pending' && b.status === 'completed') return -1;
         if (a.status === 'completed' && b.status === 'pending') return 1;
@@ -50,19 +37,13 @@ function TaskList() {
     setLoading(false);
   };
 
-  /**
-   * Handles toggling task status between 'completed' and 'pending'
-   */
   const handleStatusChange = async (id, status) => {
     await toggleTaskStatus(id, status);
     fetchTasks();
   };
 
-  /**
-   * Handles deleting a task after confirmation
-   */
   const handleDelete = async (id, e) => {
-    e.stopPropagation(); // Prevents task expansion on delete click
+    e.stopPropagation();
     if (confirm('Are you sure you want to delete this task?')) {
       await deleteTask(id);
       fetchTasks();
@@ -71,7 +52,6 @@ function TaskList() {
 
   return (
     <div className="container mx-auto p-4 min-h-fit">
-      {/* Show loading skeleton while fetching data */}
       {loading ? (
         <div className="space-y-4 mx-8">
           {[...Array(4)].map((_, index) => (
@@ -104,8 +84,8 @@ function TaskList() {
                     onClick={() => setExpandedTask(expandedTask === task._id ? null : task._id)}
                   >
                     {/* Tooltip */}
-                    <div className="absolute -top-2 left-8 w-max bg-white  text-black text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      {expandedTask === task._id ? 'Hide Description' : 'See Description'}
+                    <div className="absolute -top-2 left-8 w-max bg-white text-black text-sm px-2 py-1 rounded opacity-0 pointer-events-none transition-opacity duration-200 group-hover:opacity-100">
+                      {expandedTask === task._id ? 'Hide Description' : 'View Description'}
                     </div>
                     {/* Arrow Icon */}
                     {expandedTask === task._id ? (
@@ -115,6 +95,7 @@ function TaskList() {
                     )}
                   </div>
                 </div>
+                {/* Due Date */}
                 <p className="text-sm text-blue-700 pt-2">Due: {new Date(task.dueDate).toLocaleDateString('en-GB')}</p>
               </div>
 
